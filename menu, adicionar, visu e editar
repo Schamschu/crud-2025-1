@@ -1,0 +1,98 @@
+import os
+os.system('cls')
+
+def menu ():
+    while True: 
+        print('\n----- Menu -----')
+        print('1. Adicionar')
+        print('2. Visualizar')
+        print('3. Editar')
+        print('4. Sair')
+
+        try:
+            escolha = int(input('\nInforme a opção desejada: '))
+            if escolha == 4:
+                break
+
+            elif escolha == 1:
+                adicionar()
+
+            elif escolha == 2:
+                visualizar()
+
+            elif escolha == 3:
+                editar()
+
+            else:
+                print('\nNúmero inválido, tente novamente!')
+                continue
+       
+        except ValueError:
+            print("\nPor favor, insira um número!")
+            continue
+
+def adicionar():
+    with open('treinos.txt', 'r') as file:
+        linhas = file.readlines()
+
+    cont = len(linhas) + 1 
+
+    with open('treinos.txt', 'a') as file: 
+        print('\n----- Adicionar -----')
+        data = input('Informe a data: ')
+        tipo = input('Informe o tipo de treino (AMRAP, EMOM, For Time): ')
+        tempo = input('Informe a duração do treino em min:  ')
+        movimentos = input('Informe os movimentos: ')
+
+        treino = (f'{cont}. Data: {data} | Tipo: {tipo} | Minutos: {tempo} min | Movimentos: {movimentos}\n')
+        file.write(treino)
+
+        print('\nTreino adicionado com sucesso!')
+
+def visualizar():
+    print('\n----- Visualizar -----')
+    try:
+        with open ('treinos.txt', 'r') as file:
+            for linha in file:
+                print(linha.strip())
+    except FileNotFoundError:
+        print('Nenhum treino cadastrado!')
+
+def editar():
+    try:
+        with open ('treinos.txt','r') as file:
+            linhas = file.readlines()
+    except FileNotFoundError:
+        print('Nenhum treino cadastrado!')
+        return
+    
+    print('\n----- Editar Treino -----')
+
+    for linha in linhas:
+        print(linha.strip())
+
+    try:
+        escolha = int(input('\nInforme o número do treino que deseja alterar: '))
+        if escolha < 1 or escolha > len(linhas):
+            print('Treinos não existentes!')
+            return
+    except ValueError:
+        print('Entrada inválida. Digite um número!')
+        return
+
+    indice = escolha - 1
+    partes = linhas[indice].strip().split('|')
+
+    data_nova = input(f'Nova data ({partes[0].split(":")[1].strip()}): ')
+    tipo_novo = input(f'Novo tipo ({partes[1].split(":")[1].strip()}): ')
+    tempo_novo = input(f'Novo tempo ({partes[2].split(":")[1].strip()}): ')
+    movimentos_novo = input(f'Novo movimento ({partes[3].split(":")[1].strip()}): ')
+
+    linhas[indice] = (f"{escolha}. Data: {data_nova} | Tipo: {tipo_novo} | Tempo: {tempo_novo} | Movimentos: {movimentos_novo}\n")
+
+    with open('treinos.txt', 'w') as file:
+        file.writelines(linhas)
+
+    print("\nTreino atualizado com sucesso!")
+
+menu()
