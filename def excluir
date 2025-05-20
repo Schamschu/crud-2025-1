@@ -1,0 +1,35 @@
+def excluir():
+    try:
+        with open ('treinos.txt', 'r') as file:
+            linhas = file.readlines()
+    except FileNotFoundError:
+        print('Nenhum treino cadastrado!')
+        return
+        
+    print('\n----- Excluir Treino -----')
+        
+    for linha in linhas:
+        print(linha.strip())
+
+    try:
+        escolha = int(input('\nInforme o número do treino que deseja excluir: '))
+        if escolha < 1 or escolha > len(linhas):
+            print('Treinos não existentes.')
+            return
+    except ValueError:
+        print('Entrada inválida. Digite um número.')
+        return
+        
+    treino_removido = linhas.pop(escolha - 1)
+
+    contador = 1
+    for i in range(len(linhas)):
+        partes = linhas[i].split('. ', 1)
+        if len(partes) > 1:
+            linhas[i] = f"{contador}. {partes[1]}"
+            contador += 1
+
+    with open('treinos.txt', 'w') as file:
+        file.writelines(linhas)
+
+    print(f"Treino: [{treino_removido}] removido com sucesso!")
