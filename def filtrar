@@ -1,0 +1,50 @@
+def filtrar():
+    try:
+        with open('treinos.txt', 'r') as file:
+            linhas = file.readlines()
+    except FileNotFoundError:
+        print('Nenhum treino cadastrado!')
+        return
+    
+
+
+    print('\n----- Filtrar Treinos -----')
+    print('\n[1] Filtrar por Tipo de Treino')
+    print('[2] Filtrar por Movimento')
+
+    while True:
+            try:
+                opcao = int(input('Escolha a opção de filtro: '))
+                if opcao in [1, 2]:
+                    break
+                else:
+                    print('Opção inválida. Por favor, escolha 1 ou 2.')
+            except ValueError:
+                print('Entrada inválida. Digite um número.')
+
+    resultados = []
+    informacao = ""
+
+    if opcao == 1:
+        tipo_busca = input('Digite o tipo de treino para filtrar: ').lower()
+        informacao = f"Treinos do tipo '{tipo_busca}'"
+        for linha in linhas:
+            if tipo_busca in linha.lower().split('|')[1]:
+                resultados.append(linha.strip())
+
+    elif opcao == 2:
+        movimento_busca = input('Digite o movimento para filtrar: ').lower()
+        informacao = f"Treinos com o movimento '{movimento_busca}'"
+        for linha in linhas:
+            if movimento_busca in linha.lower().split('|')[3]:
+                resultados.append(linha.strip())
+    else:
+        print('Opção de filtro inválida.')
+        return
+
+    print(f'\n----- {informacao} -----')
+    if resultados:
+        for resultado in resultados:
+            print(resultado)
+    else:
+        print('Nenhum treino encontrado com este critério.')
